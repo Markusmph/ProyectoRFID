@@ -4,11 +4,33 @@
  */
 package base.datos.swing;
 
+import com.thingmagic.*;
+import java.util.Vector;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
+
+import java.sql.*;
 /**
  *
  * @author marco
  */
 public class GUI extends javax.swing.JFrame {
+
+    Connection conn = null;
+    Reader r = null;
+    PreparedStatement pre;
+    int[] antennaList = null;
+    String readerURI;
+    String epc = "";
+    String producto = "";
+    String sector = "";
+    String fabricante = "";
+    boolean readerconnected = false;
+    TagFilter target = null;
+    static  Gen2.Select select;
+    
 
     /**
      * Creates new form GUI
@@ -16,7 +38,9 @@ public class GUI extends javax.swing.JFrame {
     public GUI() {
         initComponents();
     }
-
+    public void show(String response) {
+        jTextAreaShow.append(response + "\n");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,21 +50,156 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        ConnectReaderButton = new javax.swing.JButton();
+        SerialPortTextField = new javax.swing.JTextField();
+        jTextAreaShow = new javax.swing.JTextArea();
+        jSeparator2 = new javax.swing.JSeparator();
+        jButtonExit = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel12.setText("Serial port:");
+
+        ConnectReaderButton.setText("Connect to reader");
+        ConnectReaderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConnectReaderButtonActionPerformed(evt);
+            }
+        });
+
+        SerialPortTextField.setText("COM5");
+        SerialPortTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SerialPortTextFieldActionPerformed(evt);
+            }
+        });
+
+        jTextAreaShow.setColumns(20);
+        jTextAreaShow.setRows(5);
+
+        jButtonExit.setText("Salir de la aplicación");
+        jButtonExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExitActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonExit)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextAreaShow)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(SerialPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                                .addComponent(ConnectReaderButton)))
+                        .addContainerGap())
+                    .addComponent(jSeparator2)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SerialPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ConnectReaderButton))
+                .addGap(111, 111, 111)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextAreaShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonExit)
+                .addGap(12, 12, 12))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ConnectReaderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConnectReaderButtonActionPerformed
+        // TODO add your handling code here: BOTON CONNECT TO READER
+        
+        readerURI = "tmr:///" + SerialPortTextField.getText();
+        //readerURI = "tmr://" + jTextField4.getText();
+        
+        antennaList = new int[1];
+        antennaList[0] = 1;
+        
+        try
+        {
+            r = Reader.create(readerURI);
+            r.connect();
+            
+            SimpleReadPlan plan = new SimpleReadPlan(antennaList, TagProtocol.GEN2, null, null, 1000);
+            r.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
+            
+            // Se establece la región de operación: NA2 (North America)
+            Reader.Region[] supportedRegions = (Reader.Region[]) r.paramGet(TMConstants.TMR_PARAM_REGION_SUPPORTEDREGIONS);
+            r.paramSet("/reader/region/id", supportedRegions[0]);
+            
+            //Se selecciona la antena 1 para operaciones del tag
+            r.paramSet("/reader/tagop/antenna", antennaList[0]);
+            
+            readerconnected = true;
+            
+            show("¡Conexión exitosa al lector M6e Nano! \n");
+            
+        }
+        catch (ReaderException re)
+        {
+            show("Reader Exception : " + re.getMessage());      
+        }
+        catch (Exception re)
+        {
+            show("Exception : " + re.getMessage());    
+        }
+
+    }//GEN-LAST:event_ConnectReaderButtonActionPerformed
+
+    private void SerialPortTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SerialPortTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SerialPortTextFieldActionPerformed
+
+    private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExitActionPerformed
+        // TODO add your handling code here:
+        if (conn != null){
+            try{
+                conn.close();
+            }catch (Exception e) { /* ignore close errors */}
+        }
+        System.exit(0);
+    }//GEN-LAST:event_jButtonExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +237,12 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ConnectReaderButton;
+    private javax.swing.JTextField SerialPortTextField;
+    private javax.swing.JButton jButtonExit;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextArea jTextAreaShow;
     // End of variables declaration//GEN-END:variables
 }
