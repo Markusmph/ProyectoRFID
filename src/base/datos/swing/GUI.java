@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
-
 import java.sql.*;
 /**
  *
@@ -38,10 +37,58 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
+        initDBComponents();
     }
+    
+    
     public void show(String response) {
         jTextAreaShow.append(response + "\n");
     }
+    
+    private void initDBComponents(){
+ 
+ try
+ { 
+ String driverName = "com.mysql.cj.jdbc.Driver";
+ Class.forName(driverName);
+ 
+ String serverName = "localhost";
+ String mydatabase = "rfid";
+ String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+ String username = "root";
+ String password = "";
+ 
+ 
+ conn = DriverManager.getConnection(url, username, password);
+ 
+ // Usar el siguiente código en caso de querer eliminar y volver a 
+ // crear la tabla ItemsRFID
+ // -------------------------------------------------------------
+ pre = conn.prepareStatement("DROP TABLE IF EXISTS ItemsRFID");
+ pre.executeUpdate();
+ 
+ pre = conn.prepareStatement(
+ "CREATE TABLE ItemsRFID ("
+ + "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"
+ + "tagEPC CHAR(24) NOT NULL,"
+ + "Nombre VARCHAR(50) NOT NULL,"
+ + "Apellido VARCHAR(50) NOT NULL,"
+ + "Matricula VARCHAR(50) NOT NULL,"
+ + "Carrera VARCHAR(50) NOT NULL,"
+ + "PRIMARY KEY(id))");
+ pre.executeUpdate();
+ // -------------------------------------------------------------
+ 
+ show("Conexión a la base de datos exitosa.");
+ 
+ }
+ catch (Exception e)
+ {
+ show("No se pudo establecer conexión con la base de datos.");
+ }
+ }
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
