@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.sql.*;
+import javax.swing.JOptionPane;
 /**
  *
  * @author marco
@@ -27,6 +28,8 @@ public class GUI extends javax.swing.JFrame {
     String Apellido = "";
     String Matricula = "";
     String Carrera = "";
+    int selection = 0;
+    int x = 0;
     boolean readerconnected = false;
     TagFilter target = null;
     static  Gen2.Select select;
@@ -68,18 +71,25 @@ public class GUI extends javax.swing.JFrame {
  //String password = "ZNIUalNTAD";
  
  //Host remoto Marco
-   String serverName = "sql.freedb.tech";
-   String mydatabase = "freedb_dbrfid2";
-   String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
-   String username = "freedb_mapache25";
-   String password = "tNtva4Ux4ZzSr#J";
+//   String serverName = "sql.freedb.tech";
+  // String mydatabase = "freedb_dbrfid2";
+   //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+   //String username = "freedb_mapache25";
+   //String password = "tNtva4Ux4ZzSr#J";
    
    //Host Remoto Cristy
-   //String serverName = "sql.freedb.tech";
-   //String mydatabase = "freedb_Crity11";
+//   String serverName = "sql.freedb.tech";
+  // String mydatabase = "freedb_Crity11";
    //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
    //String username = "freedb_Chris";
    //String password = "cS9%GEjJJrsCYz$";
+   
+      //Host Remoto Cristy 2
+   String serverName = "sql.freedb.tech";
+   String mydatabase = "freedb_Proyecto";
+   String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+   String username = "freedb_Heinrich";
+   String password = "zse?k8nxKAvcJBr";
  
  conn = DriverManager.getConnection(url, username, password);
  
@@ -90,7 +100,7 @@ public class GUI extends javax.swing.JFrame {
  //pre.executeUpdate();
  
  pre = conn.prepareStatement(
- "CREATE TABLE IF NOT EXISTS ItemsRFID ("
+ "CREATE TABLE IF NOT EXISTS Lista_Alumnos ("
  + "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"
  + "UID CHAR(24) NOT NULL,"
  + "Nombre VARCHAR(50) NOT NULL,"
@@ -206,6 +216,11 @@ public class GUI extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Reserved (Banco 0)", "UII / EPC (Banco 1)", "TID (Banco 2)", "User Data (Banco 3)" }));
         jComboBox1.setSelectedIndex(1);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jTextField1.setText("2");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -677,7 +692,7 @@ public class GUI extends javax.swing.JFrame {
                 str1 = str1 + String.format("%04x", readData[i]);
             }
             show("Data(" + Integer.toString(readData.length) + "): 0x" + str1.toUpperCase());
-
+           
         }
         catch (ReaderException re)
         {
@@ -745,7 +760,7 @@ public class GUI extends javax.swing.JFrame {
             Apellido = jTextFieldApellido.getText();
             Matricula = jTextFieldMatricula.getText();
             Carrera = jTextFieldCarrera.getText();
-            pre = conn.prepareStatement("INSERT INTO ItemsRFID (UID, Nombre, Apellido, Matricula, Carrera) VALUES(?,?,?,?,?)");
+            pre = conn.prepareStatement("INSERT INTO Lista_Alumnos (UID, Nombre, Apellido, Matricula, Carrera) VALUES(?,?,?,?,?)");
             pre.setString(1, UID);
             pre.setString(2, Nombre);
             pre.setString(3, Apellido);
@@ -780,7 +795,7 @@ int bank, address, count;
                 str1 = str1 + String.format("%04x", readData[i]);
             }
             show("EPC(" + Integer.toString(readData.length) + "): 0x" + str1.toUpperCase());
-            jTextFieldUID2.setText(str1);
+            jTextFieldUID2.setText(str1.toUpperCase());
             
         }
         catch (ReaderException re)
@@ -792,11 +807,11 @@ int bank, address, count;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try{
-            String sql = "SELECT Nombre, Apellido, Matricula, Carrera FROM ItemsRFID "
-            + "WHERE UID = '" + jTextFieldUID2.getText() + "'";
-            PreparedStatement ps = conn.prepareStatement (sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            String sql = "SELECT Nombre, Apellido, Matricula, Carrera FROM Lista_Alumnos "
+            + "WHERE UID = '" + jTextFieldUID2.getText() +"'";
+            Statement ps = conn.createStatement();
+            ResultSet rs = ps.executeQuery(sql);
+            if (rs.next()){
                 String nombreVal = rs.getString("Nombre");
                 String apellidoVal = rs.getString("Apellido");
                 String MatriculaVal = rs.getString("Matricula");
@@ -805,18 +820,39 @@ int bank, address, count;
                 jTextFieldApellido2.setText(apellidoVal);
                 jTextFieldMatricula2.setText(MatriculaVal);
                 jTextFieldCarrera2.setText(CarreraVal);
-                show("Lectura de base datos exitosa.");
-            }
+                show("Lectura de base datos exitosa. ");       
+                }
+            else{
+                jTextFieldNombre2.setText("");
+                jTextFieldApellido2.setText("");
+                jTextFieldMatricula2.setText("");
+                jTextFieldCarrera2.setText("");
+                //show("No se encontró en la base de datos este UID");
+                x = JOptionPane.showConfirmDialog(null, 
+                        "No se encontó este UID en la base de datos, ¿desea agregarla?", 
+                        "Actualizar BD", JOptionPane.YES_NO_OPTION);               
+                }           
+      
             rs.close ();
             ps.close ();
+            
         }catch (Exception e){
             show("Error. No se pudo ejecutar la función SELECT.");
         }
+        if (x == 0){
+                    jTabbedPane1.setSelectedIndex(1);
+                    jTextFieldUID.setText(jTextFieldUID2.getText());
+                    x =1;
+                }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
