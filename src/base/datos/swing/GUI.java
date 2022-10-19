@@ -68,18 +68,18 @@ public class GUI extends javax.swing.JFrame {
  //String password = "ZNIUalNTAD";
  
  //Host remoto Marco
-   //String serverName = "sql.freedb.tech";
-   //String mydatabase = "freedb_dbrfid1";
-   //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
-   //String username = "freedb_mapache25";
-   //String password = "bmC$uJZ8Ecn!P8?";
+   String serverName = "sql.freedb.tech";
+   String mydatabase = "freedb_dbrfid2";
+   String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+   String username = "freedb_mapache25";
+   String password = "tNtva4Ux4ZzSr#J";
    
    //Host Remoto Cristy
-   String serverName = "sql.freedb.tech";
-   String mydatabase = "freedb_Crity11";
-   String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
-   String username = "freedb_Chris";
-   String password = "cS9%GEjJJrsCYz$";
+   //String serverName = "sql.freedb.tech";
+   //String mydatabase = "freedb_Crity11";
+   //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+   //String username = "freedb_Chris";
+   //String password = "cS9%GEjJJrsCYz$";
  
  conn = DriverManager.getConnection(url, username, password);
  
@@ -102,6 +102,7 @@ public class GUI extends javax.swing.JFrame {
  // -------------------------------------------------------------
  
  show("Conexión a la base de datos exitosa.");
+ jTabbedPane1.setSelectedIndex(2);
  
  }
  catch (Exception e)
@@ -156,7 +157,6 @@ public class GUI extends javax.swing.JFrame {
         jTextFieldCarrera = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jToggleButton1 = new javax.swing.JToggleButton();
         jTextFieldUID2 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -168,12 +168,22 @@ public class GUI extends javax.swing.JFrame {
         jTextFieldApellido2 = new javax.swing.JTextField();
         jTextFieldMatricula2 = new javax.swing.JTextField();
         jTextFieldCarrera2 = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel12.setText("Serial port:");
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
-        ConnectReaderButton.setText("Connect to reader");
+        jLabel12.setText("Puerto serial");
+
+        ConnectReaderButton.setText("Conectar al lector");
         ConnectReaderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ConnectReaderButtonActionPerformed(evt);
@@ -217,14 +227,14 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Block Read");
+        jButton3.setText("Lectura de bloque");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Block Write");
+        jButton4.setText("Escribir a bloque");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -407,12 +417,14 @@ public class GUI extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(248, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel1))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jLabel13)
+                .addGap(0, 401, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,17 +458,10 @@ public class GUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButtonEnviarSQL))
                     .addComponent(jLabel20))
-                .addGap(0, 212, Short.MAX_VALUE))
+                .addGap(0, 225, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Base de datos", jPanel2);
-
-        jToggleButton1.setText("Leer Base de Datos");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
-            }
-        });
 
         jLabel14.setText("UID");
 
@@ -470,63 +475,101 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel19.setText("Carrera");
 
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel21.setText("Registro de asistencia a partir de RFID");
+
+        jButton9.setText("Leer tag");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Leer base de datos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/itesm.jpg"))); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel17)
-                                .addComponent(jLabel16))
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel19))
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldNombre2, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                            .addComponent(jTextFieldApellido2)
-                            .addComponent(jTextFieldMatricula2)
-                            .addComponent(jTextFieldCarrera2)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel14)
                         .addGap(33, 33, 33)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jToggleButton1)
-                            .addComponent(jTextFieldUID2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(197, Short.MAX_VALUE))
+                            .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jTextFieldUID2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(226, 226, 226)
+                                .addComponent(jLabel21)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(197, 197, 197))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel17)
+                        .addComponent(jLabel16))
+                    .addComponent(jLabel18)
+                    .addComponent(jLabel19))
+                .addGap(46, 46, 46)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldNombre2, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                    .addComponent(jTextFieldApellido2)
+                    .addComponent(jTextFieldMatricula2)
+                    .addComponent(jTextFieldCarrera2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addContainerGap()
+                .addComponent(jLabel21)
+                .addGap(13, 13, 13)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldUID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(18, 18, 18)
-                .addComponent(jToggleButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton9)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel15)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(jTextFieldNombre2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(jTextFieldApellido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(jTextFieldMatricula2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(jTextFieldCarrera2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel16)
+                            .addComponent(jTextFieldNombre2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(jTextFieldApellido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(jTextFieldMatricula2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(117, 117, 117)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(jTextFieldCarrera2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lectura", jPanel3);
@@ -538,7 +581,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -686,31 +729,6 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField3KeyReleased
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-// TODO add your handling code here:
-        try{
-            String sql = "SELECT Nombre, Apellido, Matricula, Carrera FROM ItemsRFID "
-            + "WHERE UID = '" + jTextFieldUID2.getText() + "'";
-            PreparedStatement ps = conn.prepareStatement (sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                String NombreVal = rs.getString("Nombre");
-                String ApellidoVal = rs.getString("Apellido");
-                String MatriculaVal = rs.getString("Matricula");
-                String CarreraVal = rs.getString("Matricula");
-                jTextFieldNombre2.setText(NombreVal);
-                jTextFieldApellido2.setText(ApellidoVal);
-                jTextFieldMatricula2.setText(MatriculaVal);
-                jTextFieldCarrera2.setText(CarreraVal);
-                show("Lectura de base datos exitosa.");
-            }
-            rs.close ();
-            ps.close ();
-        }catch (Exception e){
-            show("Error. No se pudo ejecutar la función SELECT.");
-        }        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
-
     private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNombreActionPerformed
@@ -742,6 +760,63 @@ public class GUI extends javax.swing.JFrame {
             show("Error al enviar la información a la base de datos.");
         }
     }//GEN-LAST:event_jButtonEnviarSQLActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here: BOTON LEER EPC
+int bank, address, count;
+
+        bank = 1;
+        address = 2;
+        count = 0;
+        
+        try
+        {            
+            Gen2.ReadData readOp = new Gen2.ReadData(Gen2.Bank.getBank(bank), address, (byte)count);
+            short[] readData = (short[]) r.executeTagOp(readOp, target);
+                        
+            String str1 = "";
+            for (int i = 0; i < readData.length; i++)
+            {
+                str1 = str1 + String.format("%04x", readData[i]);
+            }
+            show("EPC(" + Integer.toString(readData.length) + "): 0x" + str1.toUpperCase());
+            jTextFieldUID2.setText(str1);
+            
+        }
+        catch (ReaderException re)
+        {
+            show("Error reading memory of tag: " + re.getMessage());
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try{
+            String sql = "SELECT Nombre, Apellido, Matricula, Carrera FROM ItemsRFID "
+            + "WHERE UID = '" + jTextFieldUID2.getText() + "'";
+            PreparedStatement ps = conn.prepareStatement (sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                String nombreVal = rs.getString("Nombre");
+                String apellidoVal = rs.getString("Apellido");
+                String MatriculaVal = rs.getString("Matricula");
+                String CarreraVal = rs.getString("Carrera");
+                jTextFieldNombre2.setText(nombreVal);
+                jTextFieldApellido2.setText(apellidoVal);
+                jTextFieldMatricula2.setText(MatriculaVal);
+                jTextFieldCarrera2.setText(CarreraVal);
+                show("Lectura de base datos exitosa.");
+            }
+            rs.close ();
+            ps.close ();
+        }catch (Exception e){
+            show("Error. No se pudo ejecutar la función SELECT.");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     /**
      * @param args the command line arguments
@@ -790,8 +865,10 @@ public class GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ConnectReaderButton;
     private javax.swing.JTextField SerialPortTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonEnviarSQL;
     private javax.swing.JButton jButtonExit;
     private javax.swing.JComboBox jComboBox1;
@@ -808,6 +885,8 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -835,6 +914,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldNombre2;
     private javax.swing.JTextField jTextFieldUID;
     private javax.swing.JTextField jTextFieldUID2;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
