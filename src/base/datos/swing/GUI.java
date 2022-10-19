@@ -52,11 +52,13 @@ public class GUI extends javax.swing.JFrame {
  String driverName = "com.mysql.cj.jdbc.Driver";
  Class.forName(driverName);
  
- String serverName = "localhost";
- String mydatabase = "rfid_cristy";
- String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
- String username = "root";
- String password = "";
+ 
+ // Host local Cristy
+ //String serverName = "localhost";
+ //String mydatabase = "rfid_cristy";
+ //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+ //String username = "root";
+ //String password = "";
  
  // Código ejemplo usado para un servidor remoto
  //String serverName = "sql3.freemysqlhosting.net";
@@ -65,6 +67,19 @@ public class GUI extends javax.swing.JFrame {
  //String username = "sql3527658";
  //String password = "ZNIUalNTAD";
  
+ //Host remoto Marco
+   //String serverName = "sql.freedb.tech";
+   //String mydatabase = "freedb_dbrfid1";
+   //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+   //String username = "freedb_mapache25";
+   //String password = "bmC$uJZ8Ecn!P8?";
+   
+   //Host Remoto Cristy
+   String serverName = "sql.freedb.tech";
+   String mydatabase = "freedb_Crity11";
+   String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+   String username = "freedb_Chris";
+   String password = "cS9%GEjJJrsCYz$";
  
  conn = DriverManager.getConnection(url, username, password);
  
@@ -81,6 +96,7 @@ public class GUI extends javax.swing.JFrame {
  + "Nombre VARCHAR(50) NOT NULL,"
  + "Apellido VARCHAR(50) NOT NULL,"
  + "Matricula VARCHAR(50),"
+ + "Carrera VARCHAR(50),"
  + "PRIMARY KEY(id))");
  pre.executeUpdate();
  // -------------------------------------------------------------
@@ -673,7 +689,7 @@ public class GUI extends javax.swing.JFrame {
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
 // TODO add your handling code here:
         try{
-            String sql = "SELECT Nombre, Apellido, Matricula FROM ItemsRFID "
+            String sql = "SELECT Nombre, Apellido, Matricula, Carrera FROM ItemsRFID "
             + "WHERE UID = '" + jTextFieldUID2.getText() + "'";
             PreparedStatement ps = conn.prepareStatement (sql);
             ResultSet rs = ps.executeQuery();
@@ -681,9 +697,11 @@ public class GUI extends javax.swing.JFrame {
                 String NombreVal = rs.getString("Nombre");
                 String ApellidoVal = rs.getString("Apellido");
                 String MatriculaVal = rs.getString("Matricula");
+                String CarreraVal = rs.getString("Matricula");
                 jTextFieldNombre2.setText(NombreVal);
                 jTextFieldApellido2.setText(ApellidoVal);
                 jTextFieldMatricula2.setText(MatriculaVal);
+                jTextFieldCarrera2.setText(CarreraVal);
                 show("Lectura de base datos exitosa.");
             }
             rs.close ();
@@ -708,12 +726,13 @@ public class GUI extends javax.swing.JFrame {
             Nombre = jTextFieldNombre.getText();
             Apellido = jTextFieldApellido.getText();
             Matricula = jTextFieldMatricula.getText();
-            //Carrera = jTextFieldCarrera.getText();
-            pre = conn.prepareStatement("INSERT INTO ItemsRFID (UID, Nombre, Apellido, Matricula) VALUES(?,?,?,?)");
+            Carrera = jTextFieldCarrera.getText();
+            pre = conn.prepareStatement("INSERT INTO ItemsRFID (UID, Nombre, Apellido, Matricula, Carrera) VALUES(?,?,?,?,?)");
             pre.setString(1, UID);
             pre.setString(2, Nombre);
             pre.setString(3, Apellido);
             pre.setString(4, Matricula);
+            pre.setString(5, Carrera);
             pre.executeUpdate();
             pre.close();
             show("Actualización de base datos exitosa.");
