@@ -53,10 +53,17 @@ public class GUI extends javax.swing.JFrame {
  Class.forName(driverName);
  
  String serverName = "localhost";
- String mydatabase = "rfid";
+ String mydatabase = "rfid_cristy";
  String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
  String username = "root";
  String password = "";
+ 
+ // Código ejemplo usado para un servidor remoto
+ //String serverName = "sql3.freemysqlhosting.net";
+ //String mydatabase = "sql3527658";
+ //String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+ //String username = "sql3527658";
+ //String password = "ZNIUalNTAD";
  
  
  conn = DriverManager.getConnection(url, username, password);
@@ -70,7 +77,7 @@ public class GUI extends javax.swing.JFrame {
  pre = conn.prepareStatement(
  "CREATE TABLE ItemsRFID ("
  + "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"
- + "tagEPC CHAR(24) NOT NULL,"
+ + "UID CHAR(24) NOT NULL,"
  + "Nombre VARCHAR(50) NOT NULL,"
  + "Apellido VARCHAR(50) NOT NULL,"
  + "Matricula VARCHAR(50) NOT NULL,"
